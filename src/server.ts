@@ -3,12 +3,19 @@ import config from '@/config';
 import cors from 'cors';
 import logger from './util/logger';
 import router from './routes';
+import type { CorsOptions } from 'cors';
 
 const app = express();
 const PORT = config.PORT;
 
-app.use(cors());
-app.use(express());
+const corsOption: CorsOptions = {
+  origin(origin, callbak) {
+    callbak(new Error('CORS Error'), false);
+  },
+};
+
+app.use(cors(corsOption));
+app.use(express.json());
 app.use(router);
 
 app.listen(PORT, () => {
